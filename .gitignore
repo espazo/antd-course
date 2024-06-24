@@ -1,3 +1,5 @@
-node_modules
-dist
 .umi
+.idea
+
+dist
+node_modules
