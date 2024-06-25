@@ -1,12 +1,15 @@
 import {connect} from 'dva';
 import React from 'react';
 import {Table, Modal, Button, Form, Input} from 'antd';
+import SampleChart from "../../components/SampleChart.js";
 
 const FormItem = Form.Item;
 
 class List extends React.Component {
     state = {
         visible: false,
+        statisticVisible: false,
+        id: null,
     };
 
     showModal = () => {
@@ -48,7 +51,31 @@ class List extends React.Component {
             dataIndex: 'url',
             render: value => <a href={value}>{value}</a>,
         },
+        {
+            title: '',
+            dataIndex: '_',
+            render: (_, {id}) => {
+                return <Button onClick={() => {this.showStatistic(id);}}>
+                    Statistic
+                </Button>;
+            },
+        },
     ];
+
+    showStatistic = (id) => {
+        this.props.dispatch({
+            type: 'cards/getStatistic',
+            payload: id,
+        });
+        // 更新 state，弹出包含图表的对话框
+        this.setState({ id, statisticVisible: true });
+    };
+
+    handleStatisticCancel = () => {
+        this.setState({
+            statisticVisible: false,
+        });
+    }
 
     componentDidMount() {
         this.props.dispatch({
@@ -57,8 +84,8 @@ class List extends React.Component {
     }
 
     render() {
-        const {visible} = this.state;
-        const {cardsList, cardsLoading, form: {getFieldDecorator}} = this.props;
+        const {visible, statisticVisible, id} = this.state;
+        const {cardsList, cardsLoading, statistic, form: {getFieldDecorator}} = this.props;
 
         return (
             <div>
@@ -96,6 +123,10 @@ class List extends React.Component {
 
                     </Form>
                 </Modal>
+
+                <Modal visible={statisticVisible} footer={null} onCancel={this.handleStatisticCancel}>
+                    <SampleChart data={statistic[0]} />
+                </Modal>
             </div>
 
         );
@@ -106,6 +137,13 @@ function mapStateToProps(state) {
     return {
         cardsList: state.cards.cardsList,
         cardsLoading: state.loading.effects['cards/queryList'],
+        statistic: [[
+            { genre: 'Sports', sold: 275 },
+            { genre: 'Strategy', sold: 1150 },
+            { genre: 'Action', sold: 120 },
+            { genre: 'Shooter', sold: 350 },
+            { genre: 'Other', sold: 150 },
+        ]],
     };
 }
 

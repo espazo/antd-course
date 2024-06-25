@@ -28,7 +28,7 @@ export default {
                 }
             ];
             const { call, put } = sagaEffects;
-            yield call(delay, 3000);
+            yield call(delay, 0);
             yield put({ type: 'initList', payload: listData });
         }
     },
@@ -38,6 +38,14 @@ export default {
             return {
                 cardsList
             };
-        }
+        },
+        addOne(state, {payload}) {
+            return {
+                cardsList: [
+                    ...state.cardsList,
+                    payload,
+                ],
+            };
+        },
     }
 };

@@ -1,21 +1,35 @@
 export default {
     singular: true,
+    theme: {
+        '@primary-color': '#30b767',
+    },
     routes: [
-        {path: 'list', component: './list'},
         {
             path: '/',
             component: '../layout/',
             routes: [
+                {
+                    path: 'index',
+                    component: './index',
+                },
+                {
+                    path: 'css-modules-with-less',
+                    component: './css-modules-with-less',
+                },
+                {
+                    path: 'css-modules-with-antd',
+                    component: './css-modules-with-antd',
+                },
+                {
+                    path: 'list',
+                    component: './list',
+                },
                 {
                     path: 'puzzlecards',
                     component: './puzzlecards',
                 },
                 {
                     path: '/helloworld',
-                    component: './HelloWorld',
-                },
-                {
-                    path: '/',
                     component: './HelloWorld',
                 },
                 {
