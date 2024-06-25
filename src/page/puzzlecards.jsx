@@ -1,9 +1,21 @@
 import React, {Component} from 'react';
-import {Card} from 'antd';
+import {Card, Button} from 'antd';
+import {connect} from 'dva';
 
-export default class Puzzlecards extends Component {
+const namespace = 'puzzlecards';
+
+const mapStateToProps = (state) => {
+    const cardList = state[namespace];
+    return {
+        cardList,
+    };
+}
+
+@connect(mapStateToProps)
+export default class PuzzlecardsPage extends Component {
     constructor(props) {
         super(props);
+        this.counter = 100;
         this.state = {
             cardList: [
                 {
@@ -20,21 +32,39 @@ export default class Puzzlecards extends Component {
         };
     }
 
+    addNewCard = () => {
+        this.setState(prevState => {
+            const prevCardList = prevState.cardList;
+            this.counter += 1;
+            const card = {
+                id: this.counter,
+                setup: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
+                punchline: 'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            };
+            return {
+                cardList: prevCardList.concat(card),
+            };
+        });
+    }
+
     render() {
         return (
             <div>
                 {
                     this.state.cardList.map(card => {
                         return (
-                          <Card key={card.id}>
-                              <div>Q: {card.setup}</div>
-                              <div>
-                                  <strong>A: {card.punchline}</strong>
-                              </div>
-                          </Card>
+                            <Card key={card.id}>
+                                <div>Q: {card.setup}</div>
+                                <div>
+                                    <strong>A: {card.punchline}</strong>
+                                </div>
+                            </Card>
                         );
                     })
                 }
+                <div>
+                    <Button onClick={this.addNewCard}>add cards</Button>
+                </div>
             </div>
         );
     }

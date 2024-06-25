@@ -28,7 +28,7 @@ export default {
     }],
     plugins: [
         ['umi-plugin-react', {
-            Dva: true,
+            dva: true,
             antd: true,
         }],
     ],
